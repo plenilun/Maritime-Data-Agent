@@ -1,0 +1,58 @@
+.conversation-panel {
+  margin-top: auto;
+  min-height: 0;
+  padding-top: 18px;
+  border-top: 1px solid #263144;
+}
+
+.conversation-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px 8px;
+  color: #8993a6;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.conversation-head button {
+  height: 26px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 7px;
+  background: #253047;
+  color: #dfe4ed;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.conversation-list { overflow: auto; max-height: 32vh; }
+.conversation-item { display: grid; grid-template-columns: 1fr auto; align-items: center; margin: 2px 0; border-radius: 8px; }
+.conversation-item.active { background: #232d40; }
+.conversation-select { min-width: 0; border: 0; background: transparent; color: #aeb7c6; padding: 9px 8px; text-align: left; cursor: pointer; overflow: hidden; }
+.conversation-item.active .conversation-select { color: white; }
+.conversation-title { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conversation-title.editing { padding: 2px 4px; border-radius: 4px; outline: 1px solid #635bff; background: #111827; overflow: visible; }
+.conversation-meta { display: block; color: #69768a; font-size: 10px; }
+.conversation-actions { display: flex; flex-direction: column; padding-right: 5px; }
+.conversation-actions button { border: 0; background: transparent; color: #8290a5; padding: 1px 3px; cursor: pointer; font-size: 10px; }
+.conversation-actions button:hover { color: white; }
+.conversation-actions .confirm-delete { color: #ff8c8c; font-weight: 700; }
+.conversation-panel + .privacy { margin-top: 14px; }
+.run-stats { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.run-stats span { padding: 4px 8px; border-radius: 6px; background: #f0efff; color: #635bff; font-size: 11px; }
+.reasoning-summary { margin: 12px 0; padding: 12px; border-radius: 8px; background: #f7f8fb; }
+.reasoning-summary b { font-size: 12px; }
+.reasoning-summary p { margin: 5px 0 0; color: #596579; white-space: pre-wrap; }
+.metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+.metric-grid span { padding: 8px 10px; border: 1px solid #e3e8f0; border-radius: 7px; color: #7a8493; font-size: 11px; }
+.metric-grid strong { display: block; color: #303b4b; font-size: 12px; }
+
+@media (max-width: 760px) {
+  .conversation-panel { margin-top: 10px; padding-top: 10px; }
+  .conversation-list { display: flex; gap: 6px; max-height: none; }
+  .conversation-item { min-width: 150px; background: #1a2435; }
+  .conversation-actions { display: flex; }
+  .metric-grid { grid-template-columns: 1fr; }
+}
