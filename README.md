@@ -260,6 +260,11 @@ curl http://127.0.0.1:8000/api/agent/evals
 │   └── static/
 ├── data/
 │   └── .gitkeep
+├── outputs/
+│   ├── agent-system-architecture.png
+│   ├── agent-system-architecture.svg
+│   ├── agent-execution-workflow.png
+│   └── agent-execution-workflow.svg
 ├── tests/
 │   └── test_agent.py
 ├── .gitignore
