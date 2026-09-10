@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>业务数值映射</title>
+  <link rel="stylesheet" href="/static/style.css?v=20260827-code-admin" />
+  <link rel="stylesheet" href="/static/code_admin.css?v=20260827-grouped" />
+  <link rel="stylesheet" href="/static/code_admin_overrides.css?v=20260827-inner-scroll-only" />
+  <style>
+    .admin-main{grid-column:2;min-width:0}.admin-content{max-width:1200px;margin:auto;padding:28px}.admin-head,.admin-actions,.row-actions{display:flex;gap:10px;align-items:center;justify-content:space-between}.admin-note{padding:12px;border:1px solid #f1d29b;background:#fff8e8;border-radius:9px;color:#78551b}.admin-section{margin-top:20px;background:white;border:1px solid var(--line);border-radius:13px;padding:20px}.admin-section h2{margin-top:0}.admin-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.admin-grid input,.admin-grid select{width:100%}.admin-table{overflow:auto;max-height:420px;margin-top:14px}.admin-table table{width:100%;border-collapse:collapse;font-size:12px}.admin-table th,.admin-table td{padding:8px;border:1px solid var(--line);text-align:left;white-space:nowrap}.admin-table td.wrap{white-space:normal;min-width:180px}.small{padding:4px 8px;font-size:12px}.muted{color:var(--muted)}pre{white-space:pre-wrap;background:#f7f8fa;padding:12px;border-radius:8px}@media(max-width:800px){.admin-grid{grid-template-columns:1fr}.admin-head{align-items:flex-start;flex-direction:column}.admin-content{padding:22px 16px}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">问</span><div><b>智能问数</b><small>让数据直接回答</small></div></div>
+      <nav>
+        <a class="nav" href="/" style="display:block;text-decoration:none">⌁ <span>问数助手</span></a>
+        <a class="nav" href="/?view=datasets" style="display:block;text-decoration:none">▦ <span>数据表</span></a>
+        <a class="nav" href="/?view=terms" style="display:block;text-decoration:none">⌕ <span>术语库</span></a>
+        <a class="nav active" href="/admin/code-dictionary" style="display:block;text-decoration:none">▤ <span>业务数值映射</span></a>
+        <a class="nav" href="/?view=settings" style="display:block;text-decoration:none">⚙ <span>模型设置</span></a>
+      </nav>
+      <div class="privacy"><b>后台维护功能</b><span>管理编码版本、业务名称和字段绑定关系。</span></div>
+    </aside>
+    <main class="admin-main">
+      <header><div><h1>业务数值映射</h1><p>维护枚举编码、业务名称、同义词和字段绑定</p></div><div class="status ready"><i></i><span>管理页面</span></div></header>
+      <div class="admin-content">
+    <p class="admin-note">当前 Demo 尚未接入用户权限；生产部署前应为此页面和 /api/admin/* 接口增加管理员鉴权。</p>
+
+    <section class="admin-section"><div class="admin-actions"><h2>版本与 Excel 导入</h2><div><input id="code-file" type="file" accept=".xlsx,.xls" /><button id="preview-import" class="ghost">校验预览</button><button id="run-import" class="primary">导入并启用</button></div></div><div id="import-result"></div><div id="version-list" class="admin-table"></div></section>
+
+    <section class="admin-section"><div class="admin-actions"><h2>编码项</h2><div><select id="code-type-filter"><option value="">全部类型</option><option>AIS_SHIP_TYPE</option><option>NAV_STATUS</option><option>RISK_LEVEL_CODE</option></select><input id="code-search" placeholder="搜索名称或编码" /><button id="load-codes" class="ghost">查询</button></div></div>
+      <div id="code-list" class="admin-table"></div>
+    </section>
+
+    <section class="admin-section"><h2>字段绑定</h2><form id="binding-add" class="admin-grid"><select name="dataset_id" required></select><select name="column_name" required></select><select name="code_type" required><option>AIS_SHIP_TYPE</option><option>NAV_STATUS</option><option>RISK_LEVEL_CODE</option></select><button class="primary">保存绑定</button></form><div id="binding-list" class="admin-table"></div></section>
+      </div>
+    </main>
+  </div>
+  <div id="toast"></div>
+  <script src="/static/code_admin.js?v=20260827-one-line-title"></script>
+</body>
+</html>
