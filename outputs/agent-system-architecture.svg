@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="940" viewBox="0 0 1440 940" role="img" aria-labelledby="title desc">
+  <title id="title">Maritime Data Agent system architecture</title>
+  <desc id="desc">System architecture diagram for a maritime data question-answering Agent with planner, tools, memory, SQL validation, and evals.</desc>
+  <defs>
+    <style>
+      .bg { fill: #f7f9fc; }
+      .title { font: 700 42px Arial, sans-serif; fill: #172033; }
+      .subtitle { font: 400 18px Arial, sans-serif; fill: #596579; }
+      .band-title { font: 700 24px Arial, sans-serif; fill: #1e293b; }
+      .box-title { font: 700 20px Arial, sans-serif; fill: #172033; }
+      .box-body { font: 400 15px Arial, sans-serif; fill: #475569; }
+      .label { font: 700 14px Arial, sans-serif; fill: #334155; }
+      .pill { font: 700 13px Arial, sans-serif; fill: #0f766e; }
+      .small { font: 400 13px Arial, sans-serif; fill: #64748b; }
+      .panel { fill: #ffffff; stroke: #d7e0ea; stroke-width: 2; rx: 18; }
+      .runtime { fill: #eef6ff; stroke: #7fb3e9; stroke-width: 2; rx: 18; }
+      .tool { fill: #f8fbff; stroke: #bad3ee; stroke-width: 1.5; rx: 12; }
+      .data { fill: #f4fbf8; stroke: #9bd2b8; stroke-width: 2; rx: 18; }
+      .eval { fill: #fff8ed; stroke: #e8bf7a; stroke-width: 2; rx: 18; }
+      .arrow { fill: none; stroke: #475569; stroke-width: 2.5; marker-end: url(#arrow); }
+      .arrow-light { fill: none; stroke: #94a3b8; stroke-width: 2; marker-end: url(#arrow-light); }
+    </style>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#475569"/>
+    </marker>
+    <marker id="arrow-light" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1440" height="940"/>
+  <text class="title" x="72" y="76">Maritime Data Agent</text>
+  <text class="subtitle" x="72" y="110">本地航运智能问数 Agent：Planner + Tool Registry + Memory + SQL Safety + Eval</text>
+
+  <rect class="panel" x="72" y="156" width="260" height="172"/>
+  <text class="band-title" x="104" y="202">Frontend</text>
+  <text class="box-body" x="104" y="236">问数助手</text>
+  <text class="box-body" x="104" y="262">数据表 / 术语库</text>
+  <text class="box-body" x="104" y="288">编码字典管理</text>
+
+  <rect class="panel" x="400" y="156" width="260" height="172"/>
+  <text class="band-title" x="432" y="202">FastAPI</text>
+  <text class="box-body" x="432" y="236">POST /api/ask</text>
+  <text class="box-body" x="432" y="262">/api/agent/manifest</text>
+  <text class="box-body" x="432" y="288">/api/agent/evals</text>
+
+  <rect class="runtime" x="728" y="138" width="640" height="210"/>
+  <text class="band-title" x="760" y="184">Agent Runtime</text>
+  <text class="box-body" x="760" y="218">AgentRecorder 记录状态、计划、步骤、耗时、错误和追溯信息</text>
+  <text class="box-body" x="760" y="246">MaritimeAgentPlanner 动态选择 query / clarify / repair / fail</text>
+  <text class="box-body" x="760" y="274">AgentToolRegistry 统一注册和调用可观测工具</text>
+  <rect x="760" y="300" width="172" height="28" rx="14" fill="#dff4ef"/>
+  <text class="pill" x="782" y="320">agent_step_5_evals</text>
+  <rect x="950" y="300" width="218" height="28" rx="14" fill="#e6f0ff"/>
+  <text class="pill" x="971" y="320">planner_step_5_evaluable</text>
+
+  <path class="arrow" d="M332 242 H400"/>
+  <path class="arrow" d="M660 242 H728"/>
+
+  <rect class="panel" x="72" y="414" width="1296" height="284"/>
+  <text class="band-title" x="104" y="458">Registered Agent Tools</text>
+
+  <rect class="tool" x="104" y="494" width="180" height="70"/>
+  <text class="box-title" x="124" y="523">context.load</text>
+  <text class="box-body" x="124" y="548">数据目录与术语库</text>
+
+  <rect class="tool" x="304" y="494" width="180" height="70"/>
+  <text class="box-title" x="324" y="523">intent.route</text>
+  <text class="box-body" x="324" y="548">意图与主表识别</text>
+
+  <rect class="tool" x="504" y="494" width="180" height="70"/>
+  <text class="box-title" x="524" y="523">memory.recall</text>
+  <text class="box-body" x="524" y="548">历史问数召回</text>
+
+  <rect class="tool" x="704" y="494" width="180" height="70"/>
+  <text class="box-title" x="724" y="523">table.plan</text>
+  <text class="box-body" x="724" y="548">多表与 JOIN 规划</text>
+
+  <rect class="tool" x="904" y="494" width="180" height="70"/>
+  <text class="box-title" x="924" y="523">terms.retrieve</text>
+  <text class="box-body" x="924" y="548">业务术语检索</text>
+
+  <rect class="tool" x="1104" y="494" width="220" height="70"/>
+  <text class="box-title" x="1124" y="523">codes.resolve</text>
+  <text class="box-body" x="1124" y="548">编码映射与约束</text>
+
+  <rect class="tool" x="104" y="594" width="180" height="70"/>
+  <text class="box-title" x="124" y="623">sql.generate</text>
+  <text class="box-body" x="124" y="648">受控 SQL 生成</text>
+
+  <rect class="tool" x="304" y="594" width="180" height="70"/>
+  <text class="box-title" x="324" y="623">sql.validate</text>
+  <text class="box-body" x="324" y="648">只读安全校验</text>
+
+  <rect class="tool" x="504" y="594" width="180" height="70"/>
+  <text class="box-title" x="524" y="623">query.execute</text>
+  <text class="box-body" x="524" y="648">SQLite 只读查询</text>
+
+  <rect class="tool" x="704" y="594" width="180" height="70"/>
+  <text class="box-title" x="724" y="623">sql.repair</text>
+  <text class="box-body" x="724" y="648">失败 SQL 修复</text>
+
+  <rect class="tool" x="904" y="594" width="180" height="70"/>
+  <text class="box-title" x="924" y="623">answer.build</text>
+  <text class="box-body" x="924" y="648">追溯记录构建</text>
+
+  <rect class="tool" x="1104" y="594" width="220" height="70"/>
+  <text class="box-title" x="1124" y="623">answer.summarize</text>
+  <text class="box-body" x="1124" y="648">中文答案生成</text>
+
+  <path class="arrow-light" d="M1048 348 V414"/>
+
+  <rect class="data" x="72" y="754" width="392" height="120"/>
+  <text class="band-title" x="104" y="796">Local Data Layer</text>
+  <text class="box-body" x="104" y="828">SQLite：datasets / terms / code dictionary</text>
+  <text class="box-body" x="104" y="854">上传文件与运行时数据库不上传 GitHub</text>
+
+  <rect class="data" x="524" y="754" width="392" height="120"/>
+  <text class="band-title" x="556" y="796">Agent Memory</text>
+  <text class="box-body" x="556" y="828">agent_query_memory 保存问题、SQL、答案摘要</text>
+  <text class="box-body" x="556" y="854">按问题、意图、数据集和表名召回</text>
+
+  <rect class="eval" x="976" y="754" width="392" height="120"/>
+  <text class="band-title" x="1008" y="796">Offline Eval</text>
+  <text class="box-body" x="1008" y="828">/api/agent/evals 返回 score 和失败用例</text>
+  <text class="box-body" x="1008" y="854">覆盖 Planner、工具契约、SQL Safety、Memory</text>
+
+  <path class="arrow-light" d="M268 698 V754"/>
+  <path class="arrow-light" d="M720 698 V754"/>
+  <path class="arrow-light" d="M1172 698 V754"/>
+</svg>
