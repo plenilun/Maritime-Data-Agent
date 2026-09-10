@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>航运智能问数</title>
+  <link rel="stylesheet" href="/static/style.css?v=20260902-matched-terms-collapse" />
+  <link rel="stylesheet" href="/static/agent.css?v=20260910-agent-step-5" />
+  <style>@media (min-width: 761px) { .conversation-list { max-height: 50vh; } }</style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand"><span style="font-size: 2em;">🚢</span><div><b>航运智能问数</b><small>让数据直接回答</small></div></div>
+      <nav>
+        <button class="nav active" data-view="chat">⌁ <span>问数助手</span></button>
+        <button class="nav" data-view="datasets">▦ <span>数据表</span></button>
+        <button class="nav" data-view="terms">⌕ <span>术语库</span></button>
+        <button class="nav" data-view="codes">▤ <span>业务数值映射</span></button>
+        <button class="nav" data-view="settings">⚙ <span>模型设置</span></button>
+      </nav>
+      <section class="conversation-panel">
+        <div class="conversation-head"><span>对话</span><button id="new-conversation" type="button">＋</button></div>
+        <div id="conversation-list" class="conversation-list"></div>
+      </section>
+    </aside>
+    <main>
+      <header><div><h1 id="page-title">问数助手</h1><p id="page-subtitle">自动识别意图和数据表，用自然语言获得答案</p></div><div class="status"><i></i><span id="model-status">未配置模型</span></div></header>
+
+      <section id="view-chat" class="view active">
+        <div class="chat-toolbar"><div><label>主数据表<select id="chat-dataset"></select></label><select id="chat-secondary-dataset" multiple hidden></select></div><button class="ghost" data-jump="settings">配置模型</button></div>
+        <div id="messages" class="messages">
+          <div class="welcome"><div class="orb">✦</div><h2>想从数据里了解什么？</h2><p>我会先识别问题意图和所需数据表，再检索术语、生成 SQL 并给出可追溯回答。</p><div class="examples"><button>今天进来吴淞VTS区域的有多少船？</button><button>早上8点-10点的截面上行船舶流量？</button><button>当前在吴淞VTS区域吃水超过8m的船舶有哪些？</button></div></div>
+        </div>
+        <form id="ask-form" class="composer"><textarea id="question" rows="1" placeholder="请输入你的问题，例如：上个月有违规记录的船有哪些？"></textarea><button type="submit" class="send">↑</button><small>回答由模型生成，请核对重要数据</small></form>
+      </section>
+
+      <section id="view-datasets" class="view">
+        <div class="section-head"><div><h2>数据表</h2><p>上传 CSV 或 Excel，系统将自动识别字段与类型。</p></div><button class="primary" id="upload-open">＋ 上传数据表</button></div>
+        <div id="dataset-list" class="cards"></div>
+        <section class="relationship-panel">
+          <div class="section-head"><div><h2>多表识别规则</h2><p>了解系统什么时候会跨表、怎样选择关联表，以及 SQL 会受到哪些安全约束。</p></div><button class="primary" id="relationship-open" hidden>＋ 新增关系</button></div>
+          <div id="relationship-rules" class="reasoning-summary"></div>
+          <div id="relationship-list" class="term-list" hidden></div>
+        </section>
+      </section>
+
+      <section id="view-terms" class="view">
+        <div class="section-head"><div><h2>术语库</h2><p>定义业务口径、别名和计算规则，帮助模型理解问题。</p></div><div class="head-actions" style="display:flex;gap:9px"><button type="button" class="ghost" id="term-export">批量导出</button><button type="button" class="ghost" id="term-import-open">批量导入</button><button type="button" class="primary" id="term-open">＋ 新增术语</button></div></div>
+        <div class="filter"><input id="term-search" placeholder="搜索术语或定义" /><select id="term-dataset-filter"></select></div>
+        <div id="term-list" class="term-list"></div>
+      </section>
+
+      <section id="view-codes" class="view">
+        <div class="section-head"><div><h2>业务数值映射</h2><p>维护 fm_code 版本、业务名称、同义词和字段绑定。</p></div></div>
+        <!-- <p class="admin-note">当前 Demo 尚未接入用户权限；生产部署前应为业务数值映射功能增加管理员鉴权。</p> -->
+        <section class="admin-section"><div class="admin-actions"><h2>版本与 Excel 导入</h2><div><input id="code-file" type="file" accept=".xlsx,.xls" /><button id="preview-import" class="ghost">校验预览</button><button id="run-import" class="primary">导入并启用</button></div></div><div id="import-result"></div><div id="version-list" class="admin-table"></div></section>
+        <section class="admin-section"><div class="admin-actions"><h2>编码项</h2><div><select id="code-type-filter"><option value="">全部类型</option><option>AIS_SHIP_TYPE</option><option>NAV_STATUS</option><option>RISK_LEVEL_CODE</option></select><input id="code-search" placeholder="搜索名称或编码" /><button id="load-codes" class="ghost">查询</button></div></div><div id="code-list" class="admin-table"></div></section>
+        <section class="admin-section"><h2>字段绑定</h2><form id="binding-add" class="admin-grid"><select name="dataset_id" required></select><select name="column_name" required></select><select name="code_type" required><option>AIS_SHIP_TYPE</option><option>NAV_STATUS</option><option>RISK_LEVEL_CODE</option></select><button class="primary">保存绑定</button></form><div id="binding-list" class="admin-table"></div></section>
+      </section>
+
+      <section id="view-settings" class="view">
+        <div class="settings-panel"><h2>模型设置</h2><p>支持所有兼容 OpenAI Chat Completions 的服务。配置保存在此浏览器本地，关闭页面后仍会保留。</p>
+          <div class="providers">
+            <button data-provider="openai">OpenAI</button><button data-provider="deepseek">DeepSeek</button><button data-provider="qwen">通义千问</button><button data-provider="custom">自定义</button>
+          </div>
+          <form id="model-form" class="form-grid">
+            <label>API Base URL<input id="base-url" required placeholder="https://api.openai.com/v1" /></label>
+            <label>模型名称<input id="model-name" required placeholder="gpt-4.1-mini" /></label>
+            <label class="full">API Key<div class="password"><input id="api-key" type="password" required autocomplete="off" placeholder="sk-..." /><button type="button" id="toggle-key">显示</button></div></label>
+            <div class="actions full"><button type="button" class="ghost" id="test-model">测试连接</button><button type="submit" class="primary">保存到此浏览器</button></div>
+          </form><div id="model-result" class="result"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="upload-dialog"><form id="upload-form"><div class="modal-head"><h3>上传数据表</h3><button type="button" data-close>×</button></div><label>数据集名称（可选）<input name="name" placeholder="默认使用文件名" /></label><label class="drop">选择 CSV / XLSX / XLS 文件<input name="file" type="file" accept=".csv,.xlsx,.xls" required /></label><div class="actions"><button type="button" class="ghost" data-close>取消</button><button class="primary">开始上传</button></div></form></dialog>
+  <dialog id="dataset-preview-dialog" style="width:min(1100px,95vw)"><form method="dialog"><div class="modal-head"><div><h3 id="dataset-preview-title">查看数据表</h3><small id="dataset-preview-meta"></small></div><button type="button" data-close>×</button></div><div id="dataset-preview-content" class="result-table" style="max-height:65vh"></div><div class="actions"><button type="button" class="ghost" data-close>关闭</button></div></form></dialog>
+  <dialog id="term-dialog"><form id="term-form"><div class="modal-head"><h3>新增业务术语</h3><button type="button" data-close>×</button></div><label>术语<input name="term" required placeholder="例如：大船" /></label><label>定义<textarea name="definition" required placeholder="例如：船舶长度超过200米的船（length > 200）"></textarea></label><label>同义词<input name="synonyms" placeholder="例如：大型船舶" /></label><label>关联数据表<select name="dataset_id"></select></label><div class="actions"><button type="button" class="ghost" data-close>取消</button><button class="primary">保存术语</button></div></form></dialog>
+  <dialog id="term-import-dialog"><form id="term-import-form"><div class="modal-head"><h3>批量导入术语</h3><button type="button" data-close>×</button></div><p class="dialog-tip">Excel 首行字段必须为：术语、定义、同义词、关联数据表。关联数据表可填写系统中的数据表名称；留空或填写“全局术语”表示全局范围。</p><label class="drop">选择 XLSX / XLS 文件<input name="file" type="file" accept=".xlsx,.xls" required /></label><div class="actions"><button type="button" class="ghost" data-close>取消</button><button class="primary">开始导入</button></div></form></dialog>
+  <dialog id="relationship-dialog" hidden><form id="relationship-form"><div class="modal-head"><h3>新增表关联关系</h3><button type="button" data-close>×</button></div>
+    <label>关系名称<input name="name" required placeholder="例如：实时船舶与违规记录" /></label>
+    <div class="form-grid"><label>左侧数据集<select name="left_dataset_id" required></select></label><label>左侧字段<select name="left_field" required></select></label><label>右侧数据集<select name="right_dataset_id" required></select></label><label>右侧字段<select name="right_field" required></select></label></div>
+    <label>关联含义<textarea name="meaning" required placeholder="例如：两侧标识对应同一艘船"></textarea></label>
+    <div class="form-grid"><label>左表记录粒度<input name="left_grain" required placeholder="一船一条当前记录" /></label><label>右表记录粒度<input name="right_grain" required placeholder="一船多条违规记录" /></label></div>
+    <label class="check-label"><input name="enabled" type="checkbox" checked /> 启用关系</label>
+    <div class="actions"><button type="button" class="ghost" data-close>取消</button><button class="primary">保存关系</button></div>
+  </form></dialog>
+  <dialog id="relationship-check-dialog" style="width:min(760px,92vw)"><form method="dialog"><div class="modal-head"><h3>关联检查</h3><button type="button" data-close>×</button></div><div id="relationship-check-result"></div><div class="actions"><button class="ghost">关闭</button></div></form></dialog>
+  <div id="toast"></div>
+  <script src="/static/app.js?v=20260910-agent-step-5"></script>
+</body>
+</html>

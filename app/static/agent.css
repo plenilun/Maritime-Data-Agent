@@ -1,0 +1,156 @@
+.agent-trace {
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid #d8e2f6;
+  border-radius: 8px;
+  background: #f8fbff;
+}
+
+.agent-trace > b {
+  display: block;
+  margin-bottom: 9px;
+}
+
+.agent-state {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.agent-state span {
+  display: grid;
+  gap: 3px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.agent-state strong {
+  color: #263144;
+  font-size: 12px;
+}
+
+.agent-plan {
+  margin-bottom: 10px;
+}
+
+.planner-decision {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 10px;
+  padding: 9px 10px;
+  border: 1px solid #e3e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.planner-decision b {
+  font-size: 12px;
+}
+
+.planner-decision span,
+.planner-decision small {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.agent-plan summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.agent-plan ol {
+  margin: 8px 0 0 18px;
+  padding: 0;
+  color: #485468;
+  font-size: 12px;
+}
+
+.agent-steps {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.agent-steps li {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: start;
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.agent-steps li > span {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #eef1f6;
+  color: #566274;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.agent-steps li.success > span {
+  background: #e8f8f0;
+  color: #16794b;
+}
+
+.agent-steps li.failed > span {
+  background: #ffecec;
+  color: #c13232;
+}
+
+.agent-steps b,
+.agent-steps small {
+  display: block;
+}
+
+.agent-steps b {
+  font-size: 12px;
+}
+
+.agent-steps small {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.agent-steps em {
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+  white-space: nowrap;
+}
+
+.agent-error {
+  color: #c13232 !important;
+}
+
+.agent-warning {
+  color: #a16600 !important;
+}
+
+@media (max-width: 760px) {
+  .agent-state {
+    grid-template-columns: 1fr;
+  }
+
+  .agent-steps li {
+    grid-template-columns: 24px minmax(0, 1fr);
+  }
+
+  .agent-steps em {
+    grid-column: 2;
+  }
+}
